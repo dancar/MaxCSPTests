@@ -1,7 +1,7 @@
 /**
  * 
  */
-package maxcsp.tests;
+package maxcsp;
 
 import static org.junit.Assert.*;
 
