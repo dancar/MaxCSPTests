@@ -18,7 +18,7 @@ import org.junit.Test;
  * @author kits
  *
  */
-public class AssignmentTestTest {
+public class AssignmentTest {
 	private static final int DOMAIN_SIZE = 10;
 	private static final int ID=8;
 	private static final int VALUE=200;
@@ -67,7 +67,10 @@ public class AssignmentTestTest {
 	 */
 	@Test
 	public  void testAssignmentAssignment() {
-	//	fail("Not yet implemented"); // TODO
+		_ass.assign(v2, VALUE2);
+		Assignment ass2 = new Assignment(_ass);
+		assertEquals(VALUE2, ass2.value(v2));
+		assertFalse(ass2.isAssigned(v1));
 	}
 
 	/**
