@@ -29,9 +29,6 @@ public class VariableTest {
 		v1 = new Variable(ID);
 		v1.assign(VALUE);
 	}
-	private void a(boolean cond){
-		Assert.assertTrue(cond);
-	}
 	/**
 	 * Test method for {@link maxcsp.Variable#Variable(int)}.
 	 */

@@ -28,20 +28,6 @@ public class AssignmentTest {
 	private Variable v1;
 	private Variable v2;
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	/**
 	 * @throws java.lang.Exception
@@ -128,6 +114,22 @@ public class AssignmentTest {
 		assertFalse(itr.hasNext());
 		assertTrue(next.equals(v2));
 		assertEquals(next.value(),VALUE2);
+	}
+	
+	@Test
+	public final void testPickUnassigned(){
+		Assignment ass = new Assignment(2);
+		Variable v0 = new Variable(0);
+		Variable v1 = new Variable(1);
+		Variable v = ass.pickUnassignedVariable();
+		assertTrue(v.equals(v1) | v.equals(v0));
+		ass.assign(v1.assign(VALUE));
+		v=ass.pickUnassignedVariable();
+		assertTrue(v.equals(v0));
+		ass.unassign(v1);
+		ass.assign(v0.assign(VALUE2));
+		v=ass.pickUnassignedVariable();
+		assertTrue(v.equals(v1));
 	}
 	
 
