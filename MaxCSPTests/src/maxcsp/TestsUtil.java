@@ -97,4 +97,13 @@ public class TestsUtil {
 
 		return new ProblemInfo(effective_p1, effective_p2, constrainedPairs, forbiddenPairs);
 	}
+	
+	public static Problem randomCSP(int varsMin, int varsMax, int domainMin, int domainMax){
+		return new Problem(
+				Util.randBetween(varsMin, varsMax),
+				Util.randBetween(domainMin, domainMax),
+				Math.random(),
+				Math.random()
+				);
+	}
 }

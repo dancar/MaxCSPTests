@@ -5,6 +5,8 @@ package maxcsp;
 
 import static org.junit.Assert.*;
 
+import java.util.Iterator;
+
 import maxcsp.Assignment;
 import maxcsp.Variable;
 
@@ -19,7 +21,7 @@ import org.junit.Test;
  *
  */
 public class AssignmentTest {
-	private static final int DOMAIN_SIZE = 10;
+	private static final int VARS_COUNT = 10;
 	private static final int ID=8;
 	private static final int VALUE=200;
 	private static final int ID2=9;
@@ -28,25 +30,15 @@ public class AssignmentTest {
 	private Variable v1;
 	private Variable v2;
 	
-
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		_ass=new Assignment(DOMAIN_SIZE);
+		_ass=new Assignment(VARS_COUNT);
 		v1=new Variable(ID);
 		v2=new Variable(ID2);
 	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	
 
 	/**
 	 * Test method for {@link maxcsp.Assignment#Assignment(maxcsp.Assignment)}.
@@ -98,13 +90,15 @@ public class AssignmentTest {
 	 */
 	@Test
 	public final void testAssignedVariablesIterator() {
-		assertFalse(_ass.assignedVariablesIterator().hasNext());
+		assertEquals(0,_ass.getAssignedVars().size());
 		_ass.assign(v1, VALUE);
-		assertTrue(_ass.assignedVariablesIterator().hasNext());
-		assertTrue(_ass.assignedVariablesIterator().next().equals(v1));
-		assertEquals(_ass.assignedVariablesIterator().next().value(),VALUE);
+//		assertTrue(_ass.assignedVariablesIterator().hasNext());
+		assertEquals(1,_ass.getAssignedVars().size());
+//		assertTrue(_ass.assignedVariablesIterator().next().equals(v1));
+		assertTrue(_ass.getAssignedVars().iterator().next().equals(v1));
+		assertEquals(_ass.getAssignedVars().iterator().next().value(),VALUE);
 		_ass.assign(v2,VALUE2);
-		java.util.Iterator<Variable> itr = _ass.assignedVariablesIterator();
+		java.util.Iterator<Variable> itr = _ass.getAssignedVars().iterator();
 		assertTrue(itr.hasNext());
 		Variable next = itr.next();
 		assertTrue(next.equals(v1));
@@ -114,6 +108,25 @@ public class AssignmentTest {
 		assertFalse(itr.hasNext());
 		assertTrue(next.equals(v2));
 		assertEquals(next.value(),VALUE2);
+	}
+	
+	@Test
+	public final void testUnassignedVariablesIterator() {
+		int counter=0;
+		Iterator<Variable> itr = _ass.getUnassignedVars().iterator();
+		while(itr.hasNext()){
+			itr.next();
+			counter++;
+		}
+		assertEquals(counter,VARS_COUNT);
+		_ass.assign(v1,VALUE);
+		counter=0;
+		itr = _ass.getUnassignedVars().iterator();
+		while(itr.hasNext()){
+			assertFalse(itr.next().equals(v1));
+			counter++;
+		}
+		assertEquals(counter,VARS_COUNT-1);
 	}
 	
 	@Test
