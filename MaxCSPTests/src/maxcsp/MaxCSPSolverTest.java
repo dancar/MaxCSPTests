@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.Vector;
 
-import maxcsp.tests.TestsUtil;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,9 +15,6 @@ public class MaxCSPSolverTest {
 	Problem _problem;
 	MaxCSPSolver _solver;
 	private TestsUtil _u;
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -27,12 +23,11 @@ public class MaxCSPSolverTest {
 		_solver = new MaxCSPSolver(_problem);
 	}
 
-	
-
 	@Test
 	public final void testSolve() {
-		Solution ans = _solver.solve();
+		Assignment ans = _solver.solve();
 		assertEquals(ans._distance,0);
+		assertEquals(_solver.solutionDistance(),0);
 	}
 	@Test
 	public final void testSolve2() {
@@ -44,8 +39,8 @@ public class MaxCSPSolverTest {
 			}
 		}
 		_solver = new MaxCSPSolver(new Problem(VARS, DOMAIN_SIZE,cs));
-		Solution ans = _solver.solve();
-		assertEquals(ans._distance*2,VARS*(VARS-1));
+		_solver.solve();
+		assertEquals(_solver.solutionDistance()*2,VARS*(VARS-1));
 	}
 
 	@Test
@@ -72,6 +67,54 @@ public class MaxCSPSolverTest {
 		ass.assign(_u.v2.assign(1));
 		assertEquals(1,_solver.calcSingleVariableDistance(_u.v0,ass));
 		
+	}
+	private static final int DOMAIN_MIN = 4;
+	private static final int DOMAIN_MAX = 8;
+	private static final int VARS_MIN=4;
+	private static final int VARS_MAX=8;	
+	private static final int RANDOM_TESTS_COUNT=50;
+	private static final int NQUEENS_TESTS_COUNT=8;
+	@Test
+	public void testNQueensDistanceSanity(){
+		for(int n=4;n<=NQUEENS_TESTS_COUNT;n++){
+			NQueensProblem p = new NQueensProblem(n);
+			_solver = new MaxCSPSolver(p);
+			Assignment sol = _solver.solve();
+			assertEquals(_solver.solutionDistance(),0);
+			assertEquals(_solver.solutionDistance(),sol._distance);
+		}
+	}
+	
+	@Test
+	public void testRandomDistanceSanity(){
+		for(int i=0;i<RANDOM_TESTS_COUNT;i++){
+			int vars = Util.randBetween(VARS_MIN, VARS_MAX);
+			int domainSize = Util.randBetween(DOMAIN_MIN, DOMAIN_MAX);
+			double p1 = Math.random();
+			double p2 = Math.random();
+			Problem p = new Problem(vars,domainSize,p1,p2);
+			Logger.inst().debug("Testing distance for " + p + "... ",false);
+			Assignment sol = new MaxCSPSolver(p).solve();
+			int mydistance=calcAssignmentDistance(p,sol);
+			
+			boolean equalDistance = mydistance==sol._distance;
+			assertTrue(equalDistance);
+			if(equalDistance)
+				Logger.inst().debug("Equal distance. ");
+			
+		}
+	}
+
+	private int calcAssignmentDistance(Problem p, Assignment sol) {
+		int ans=0;
+		java.util.Iterator<OrderedPair<Variable>> itr = Util.differentPairsIterator(p._vars);
+		while(itr.hasNext()){
+			OrderedPair<Variable> vp = itr.next();
+			if(!p.check(vp._left.assign(sol.value(vp._left)),
+					vp._right.assign(sol.value(vp._right))))
+				ans++;
+		}
+		return ans;
 	}
 
 }

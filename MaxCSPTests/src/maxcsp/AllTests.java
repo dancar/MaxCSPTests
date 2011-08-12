@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	MaxCSPSolverTest.class,
 	ProblemTest.class,
 	UnorderedPairTest.class, 
-	VariableTest.class })
+	VariableTest.class,
+	})
 public class AllTests {
 
 }
