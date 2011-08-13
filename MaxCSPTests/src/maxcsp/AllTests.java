@@ -12,5 +12,5 @@ import org.junit.runners.Suite.SuiteClasses;
 	SolversSanityCheck.class,
 	})
 public class AllTests {
-
+	//do nothing
 }
