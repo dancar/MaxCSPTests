@@ -1,31 +1,28 @@
 package maxcsp;
 
 import java.util.Vector;
-
 import maxcsp.Constraint;
-import maxcsp.OrderedPair;
 import maxcsp.Problem;
 import maxcsp.Util;
-import maxcsp.Variable;
 
 public class TestsUtil {
 	
 	private static final int VARS_COUNT = 3;
 	private static final int DOMAIN_SIZE = 2;
-	private Variable[] _vars;
+	private int[] _vars;
 	public Problem _problem;
-	public Variable v0;
-	public Variable v1;
-	public Variable v2;
+	public int v0;
+	public int v1;
+	public int v2;
 	
 	public TestsUtil(){
-		_vars = new Variable[VARS_COUNT];
+		_vars = new int [VARS_COUNT];
 		for(int i=0;i<VARS_COUNT;i++){
-			_vars[i]=new Variable(i);
+			_vars[i]=i;
 		}
-		Integer values0_1[][] = {{0,0},{1,1}};
-		Integer values1_2[][] = {{1,0},{0,1},{1,1}};
-		Integer values0_2[][] = {{0,1},{1,0}};
+		int values0_1[][] = {{0,0},{1,1}};
+		int values1_2[][] = {{1,0},{0,1},{1,1}};
+		int values0_2[][] = {{0,1},{1,0}};
 		
 		Vector<Constraint> constraints = new java.util.Vector<Constraint>();
 		constraints.add(new Constraint(_vars[1],_vars[2],Util.quickPV(values1_2)));
@@ -33,9 +30,9 @@ public class TestsUtil {
 		constraints.add(new Constraint(_vars[0],_vars[2],Util.quickPV(values0_2)));
 		
 		_problem=new Problem(VARS_COUNT,DOMAIN_SIZE,constraints);
-		v0=new Variable(0);
-		v1=new Variable(1);
-		v2=new Variable(2);
+		v0=0;
+		v1=1;
+		v2=2;
 	}
 	public final static class ProblemInfo{
 		public final double p1;
@@ -75,18 +72,15 @@ public class TestsUtil {
 	public static ProblemInfo calcProblemEffectivePs(Problem p){
 		int constrainedPairs=0;
 		int forbiddenPairs = 0;
-		java.util.Iterator<OrderedPair<Variable>> varPairs = Util.differentPairsIterator(p._vars);
-		while(varPairs.hasNext()){
-			OrderedPair<Variable> vp = varPairs.next();
-			boolean constrained=false;
-			java.util.Iterator<OrderedPair<Integer>> valuePairs = Util.pairsIterator(p._domain);
-			while(valuePairs.hasNext()){
-				OrderedPair<Integer> values = valuePairs.next();
-				if(!p.check(vp._left.assign(values._left), vp._right.assign(values._right))){
-					forbiddenPairs++;
-					constrained=true;
+		for(int varLeft = 0;varLeft<p._varCount;varLeft++)
+			for(int varRight=varLeft+1;varRight<p._varCount;varRight++){
+				boolean constrained=false;
+				for(int valueLeft : p._domain)for(int valueRight : p._domain){
+					if(!p.check(varLeft,valueLeft,varRight,valueRight)){
+						forbiddenPairs++;
+						constrained=true;
+					}
 				}
-			}
 			if(constrained){
 				constrainedPairs++;
 			}

@@ -23,19 +23,17 @@ public class SolversSanityCheck {
 		for(int test=0;test<RANDOM_TESTS_COUNT;test++){
 			Problem p = TestsUtil.randomCSP(VARS_MIN, VARS_MAX, DOMAIN_MIN, DOMAIN_MAX);
 			Logger.inst().debug("Distansanity test: problem: " + p);
-			Vector<MaxCSPSolver> solvers = Util.makeSolvers(p);
+			Vector<BranchAndBoundSolver> solvers = Util.makeSolvers(p);
 			Vector<Integer> distances = new Vector<Integer>();
 			for(MaxCSPSolver s : solvers){
 				Logger.inst().debug("Distansanity test: algorithm: " + s.getClass().getName(),false);
 				s.solve();
-				int distance = s.solutionDistance();
+				int distance = s.solutionCost();
 				Logger.inst().debug("\tdistance: " + distance);
 				distances.add(distance);
 			}
-			java.util.Iterator<OrderedPair<Integer>> itr = Util.differentPairsIterator(distances);
-			while(itr.hasNext()){
-				OrderedPair<Integer> pair = itr.next();
-				assertEquals(pair._left,pair._right);
+			for(int i=1;i<distances.size();i++){
+				assertTrue(distances.elementAt(i-1)==distances.elementAt(i));
 			}
 		}
 	}

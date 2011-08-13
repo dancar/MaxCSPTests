@@ -5,11 +5,7 @@ package maxcsp;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Vector;
-
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -38,29 +34,29 @@ public class ProblemTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Variable var1 = new Variable(1);
-		Variable var2 = new Variable(2);
-		Variable var3 = new Variable(3);
+		 int var1 = 1;
+		 int var2 = 2;
+		 int var3 = 3;
 		
-		Collection<Constraint> constraints = new Vector<Constraint>();
+		Vector<Constraint> constraints = new Vector<Constraint>();
 		
-		Collection<OrderedPair<Integer>> possibleValues1_2 = new Vector<OrderedPair<Integer>>();
-		possibleValues1_2.add(new OrderedPair<Integer>(0,1));
-		possibleValues1_2.add(new OrderedPair<Integer>(0,2));
-		possibleValues1_2.add(new OrderedPair<Integer>(1,0));
+		Vector<IntPair> possibleValues1_2 = new Vector<IntPair>();
+		possibleValues1_2.add(new IntPair(0,1));
+		possibleValues1_2.add(new IntPair(0,2));
+		possibleValues1_2.add(new IntPair(1,0));
 		Constraint c1=new Constraint(var1,var2,possibleValues1_2);
 		constraints.add(c1);
 		
-		Collection<OrderedPair<Integer>> possibleValues1_3 = new Vector<OrderedPair<Integer>>();
-		possibleValues1_3.add(new OrderedPair<Integer>(3,2));
-		possibleValues1_3.add(new OrderedPair<Integer>(4,1));
+		Vector<IntPair> possibleValues1_3 = new Vector<IntPair>();
+		possibleValues1_3.add(new IntPair(3,2));
+		possibleValues1_3.add(new IntPair(4,1));
 		Constraint c2=new Constraint(var1, var3,possibleValues1_3);
 		constraints.add(c2);
 		
-		Collection<OrderedPair<Integer>> possibleValues2_3 = new Vector<OrderedPair<Integer>>();
-		possibleValues2_3.add(new OrderedPair<Integer>(0,0));
-		possibleValues2_3.add(new OrderedPair<Integer>(1,1));
-		possibleValues2_3.add(new OrderedPair<Integer>(2,2));
+		Vector<IntPair> possibleValues2_3 = new Vector<IntPair>();
+		possibleValues2_3.add(new IntPair(0,0));
+		possibleValues2_3.add(new IntPair(1,1));
+		possibleValues2_3.add(new IntPair(2,2));
 		Constraint c3=new Constraint(var2, var3,possibleValues2_3);
 		constraints.add(c3);
 		
@@ -70,76 +66,76 @@ public class ProblemTest {
 	
 	@Test
 	public void test1() throws Exception{
-		assertTrue(p.check(new Variable(1).assign(0), new Variable(2).assign(1)));
-		assertTrue(p.check(new Variable(1).assign(0), new Variable(2).assign(2)));
-		assertTrue(p.check(new Variable(1).assign(1), new Variable(2).assign(0)));
+		assertTrue(p.check(1,0, 2,1));
+		assertTrue(p.check(1,0, 2,2));
+		assertTrue(p.check(1,1, 2,0));
 		
-		assertTrue(p.check(new Variable(1).assign(3), new Variable(3).assign(2)));
-		assertTrue(p.check(new Variable(1).assign(4), new Variable(3).assign(1)));
+		assertTrue(p.check(1,3, 3,2));
+		assertTrue(p.check(1,4, 3,1));
 		
-		assertTrue(p.check(new Variable(2).assign(0), new Variable(3).assign(0)));
-		assertTrue(p.check(new Variable(2).assign(1), new Variable(3).assign(1)));
-		assertTrue(p.check(new Variable(2).assign(2), new Variable(3).assign(2)));
+		assertTrue(p.check(2,0, 3,0));
+		assertTrue(p.check(2,1, 3,1));
+		assertTrue(p.check(2,2, 3,2));
 	}
 	@Test
 	public void test1f() throws Exception{
-		assertFalse(p.check(new Variable(1).assign(11), new Variable(2).assign(0)));
-		assertFalse(p.check(new Variable(1).assign(2), new Variable(2).assign(0)));
-		assertFalse(p.check(new Variable(1).assign(7), new Variable(2).assign(0)));
+		assertFalse(p.check(1,11, 2,0));
+		assertFalse(p.check(1,2, 2,0));
+		assertFalse(p.check(1,7, 2,0));
 		
-		assertFalse(p.check(new Variable(1).assign(3), new Variable(3).assign(3)));
-		assertFalse(p.check(new Variable(1).assign(4), new Variable(3).assign(19)));
+		assertFalse(p.check(1,3, 3,3));
+		assertFalse(p.check(1,4, 3,19));
 		
-		assertFalse(p.check(new Variable(2).assign(1), new Variable(3).assign(0)));
-		assertFalse(p.check(new Variable(2).assign(0), new Variable(3).assign(1)));
-		assertFalse(p.check(new Variable(2).assign(3), new Variable(3).assign(2)));
+		assertFalse(p.check(2,1, 3,0));
+		assertFalse(p.check(2,0, 3,1));
+		assertFalse(p.check(2,3, 3,2));
 	}
 	
 	@Test
 	public void test2() throws Exception{
-		assertTrue(p.check(new Variable(2).assign(0), new Variable(1).assign(1)));
-		assertTrue(p.check(new Variable(2).assign(2), new Variable(1).assign(0)));
+		assertTrue(p.check(2,0, 1,1));
+		assertTrue(p.check(2,2, 1,0));
 		
-		assertTrue(p.check(new Variable(3).assign(2), new Variable(1).assign(3)));
-		assertTrue(p.check(new Variable(3).assign(1), new Variable(1).assign(4)));
+		assertTrue(p.check(3,2, 1,3));
+		assertTrue(p.check(3,1, 1,4));
 		
-		assertTrue(p.check(new Variable(3).assign(0), new Variable(2).assign(0)));
-		assertTrue(p.check(new Variable(3).assign(1), new Variable(2).assign(1)));
-		assertTrue(p.check(new Variable(3).assign(2), new Variable(2).assign(2)));
+		assertTrue(p.check(3,0, 2,0));
+		assertTrue(p.check(3,1, 2,1));
+		assertTrue(p.check(3,2, 2,2));
 	}
 	
 	public void test2f() throws Exception{
 		
-		assertFalse(p.check(new Variable(3).assign(3), new Variable(1).assign(2)));
-		assertFalse(p.check(new Variable(3).assign(4), new Variable(1).assign(1)));
+		assertFalse(p.check(3,3, 1,2));
+		assertFalse(p.check(3,4, 1,1));
 		
 	}
 	@Test
 	public void test3f() throws Exception{
-		assertTrue(p.check(new Variable(0).assign(19), new Variable(1).assign(2)));
+		assertTrue(p.check(0,19, 1,2));
 	
 	}
 	
 	@Test
 	public void testU() throws Exception{
 		TestsUtil u = new TestsUtil();
-		assertTrue(u._problem.check(u.v0.assign(0), u.v1.assign(0)));
-		assertTrue(u._problem.check(u.v0.assign(1), u.v1.assign(1)));
-		assertFalse(u._problem.check(u.v0.assign(0), u.v1.assign(1)));
-		assertFalse(u._problem.check(u.v0.assign(1), u.v1.assign(0)));
+		assertTrue(u._problem.check(0,0, 1,0));
+		assertTrue(u._problem.check(0,1, 1,1));
+		assertFalse(u._problem.check(0,0, 1,1));
+		assertFalse(u._problem.check(0,1, 1,0));
 		
-		assertTrue(u._problem.check(u.v0.assign(0), u.v2.assign(1)));
-		assertTrue(u._problem.check(u.v0.assign(1), u.v2.assign(0)));
-		assertFalse(u._problem.check(u.v0.assign(0), u.v2.assign(0)));
-		assertFalse(u._problem.check(u.v0.assign(1), u.v2.assign(1)));
+		assertTrue(u._problem.check(0,0, 2,1));
+		assertTrue(u._problem.check(0,1, 2,0));
+		assertFalse(u._problem.check(0,0, 2,0));
+		assertFalse(u._problem.check(0,1, 2,1));
 		
-		assertTrue(u._problem.check(u.v2.assign(0), u.v1.assign(1)));
-		assertTrue(u._problem.check(u.v2.assign(1), u.v1.assign(0)));
-		assertTrue(u._problem.check(u.v2.assign(1), u.v1.assign(1)));
-		assertFalse(u._problem.check(u.v2.assign(0), u.v1.assign(0)));
+		assertTrue(u._problem.check(2,0, 1,1));
+		assertTrue(u._problem.check(2,1, 1,0));
+		assertTrue(u._problem.check(2,1, 1,1));
+		assertFalse(u._problem.check(2,0, 1,0));
 	}
 	
-	public OrderedPair<Double> testRandom() throws Exception{
+	public double[] testRandom() throws Exception{
 		double p1 = Math.random();
 		double p2 = Math.random();
 		int vars = Util.randBetween(VARS_MIN, VARS_MAX);
@@ -148,8 +144,10 @@ public class ProblemTest {
 		TestsUtil.ProblemInfo pi = TestsUtil.calcProblemEffectivePs(p);
 		double distance_p1 = Math.abs(p1-pi.p1);
 		double distance_p2 = (pi.constraintsCount==0 ? 0 : Math.abs(p2-pi.p2));
-		return new OrderedPair<Double>(distance_p1,distance_p2);
-		
+		double[] ans = new double[2];
+		ans[0]=distance_p1;
+		ans[1]=distance_p2;
+		return ans;
 	}
 	
 	@Test
@@ -157,9 +155,9 @@ public class ProblemTest {
 		double total_distance_p1=0;
 		double total_distance_p2=0;
 		for (int i=0;i<RANDOM_TESTS_COUNT;i++){
-			OrderedPair<Double> res = testRandom();
-			total_distance_p1+=res._left;
-			total_distance_p2+=res._right;
+			double distances[] = testRandom();
+			total_distance_p1+=distances[0];
+			total_distance_p2+=distances[1];
 			Logger.inst().debug("Random Test " + i + " ok.");
 		}
 		double average_distance_p1 = total_distance_p1 / RANDOM_TESTS_COUNT;

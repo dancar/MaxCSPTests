@@ -7,10 +7,9 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	AssignmentTest.class, 
-	MaxCSPSolverTest.class,
+	BranchAndBoundSolverTest.class,
 	ProblemTest.class,
-	UnorderedPairTest.class, 
-	VariableTest.class,
+	SolversSanityCheck.class,
 	})
 public class AllTests {
 
